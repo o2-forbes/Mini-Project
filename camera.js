@@ -6,8 +6,8 @@ export function createCamera(gameWindow) {
   const MIDDLE_MOUSE_BUTTON = 1;
   const RIGHT_MOUSE_BUTTON = 2;
 
-  const MIN_CAMERA_RADIUS = 2;
-  const MAX_CAMERA_RADIUS = 10;
+  const MIN_CAMERA_RADIUS = 10;
+  const MAX_CAMERA_RADIUS = 20;
 
   const MIN_CAMERA_ELEVATION = 30;
   const MAX_CAMERA_ELEVATION = 90;
@@ -25,9 +25,9 @@ export function createCamera(gameWindow) {
     1000
   );
   let cameraOrigin = new THREE.Vector3(0, 1, 0);
-  let cameraRadius = 4;
-  let cameraAzimuth = 0;
-  let cameraElevation = 0;
+  let cameraRadius = (MIN_CAMERA_RADIUS + MAX_CAMERA_RADIUS) / 2;
+  let cameraAzimuth = 135;
+  let cameraElevation = 45;
   let isLeftMouseDown = false;
   let isRightMouseDown = false;
   let isMiddleMouseDown = false;
@@ -53,7 +53,6 @@ export function createCamera(gameWindow) {
   updateCameraPosition();
 
   function onMouseDown(event) {
-    console.log("mousedown");
     if (event.button === LEFT_MOUSE_BUTTON) {
       isLeftMouseDown = true;
     }
@@ -67,7 +66,6 @@ export function createCamera(gameWindow) {
   }
 
   function onMouseUp(event) {
-    console.log("mouseup");
     if (event.button === LEFT_MOUSE_BUTTON) {
       isLeftMouseDown = false;
     }
@@ -80,8 +78,6 @@ export function createCamera(gameWindow) {
   }
 
   function onMouseMove(event) {
-    console.log("mousemove");
-
     const deltaX = event.clientX - prevMouseX;
     const deltaY = event.clientY - prevMouseY;
 
@@ -92,7 +88,7 @@ export function createCamera(gameWindow) {
       cameraElevation = Math.min(
         MAX_CAMERA_ELEVATION,
         Math.max(MIN_CAMERA_ELEVATION, cameraElevation)
-      ); // Allow negative elevation
+      );
       updateCameraPosition();
     }
 
@@ -108,7 +104,6 @@ export function createCamera(gameWindow) {
 
     // Handle panning of the camera (future implementation)
     if (isMiddleMouseDown) {
-      const panFactor = 0.005; // This factor controls the speed of panning
       const forward = new THREE.Vector3(0, 0, 1).applyAxisAngle(
         Y_AXIS,
         cameraAzimuth * DEG2RAD

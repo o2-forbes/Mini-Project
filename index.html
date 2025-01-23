@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="./main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./main.css" />
 
-        <script type="importmap">
-            {
-              "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
-              }
-            }
-            </script>
-            
-    </head>
-    <body>
-        <div id="root-window">
-            <div id ="render-target">
-        </div>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
 
-        <script type="module">
-            import { createScene } from './scene.js';
+  <body>
+    <div id="root-window">
+      <div id="render-target"></div>
+    </div>
 
-            window.onload = () => {
-                window.scene = createScene();
-                document.addEventListener('mousedown', window.scene.onMouseDown, false);
-                document.addEventListener('mouseup', window.scene.onMouseUp, false);
-                document.addEventListener('mousemove', window.scene.onMouseMove, false);
-                window.scene.start();
-            }
-        </script>
-    </body>
+    <script type="module">
+      import { createScene } from "./scene.js";
+      import { createCity } from "./city.js";
+
+      window.onload = () => {
+        const scene = createScene(); // Create the scene
+        const city = createCity(8); // Create the city
+        scene.initialise(city); // Initialise the scene with the city
+        scene.start(); // Start rendering the scene
+      };
+    </script>
+  </body>
 </html>
