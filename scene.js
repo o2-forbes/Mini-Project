@@ -30,17 +30,23 @@ export function createScene() {
     renderer.setAnimationLoop(null);
   }
 
-  function onMouseDown() {
-    camera.onMouseDown();
+  // Pass the event correctly to camera methods
+  function onMouseDown(event) {
+    camera.onMouseDown(event);
   }
 
-  function onMouseUp() {
-    camera.onMouseUp();
+  function onMouseUp(event) {
+    camera.onMouseUp(event);
   }
 
   function onMouseMove(event) {
     camera.onMouseMove(event);
   }
+
+  // Add event listeners and pass the events to the camera functions
+  document.addEventListener("mousedown", onMouseDown, false);
+  document.addEventListener("mouseup", onMouseUp, false);
+  document.addEventListener("mousemove", onMouseMove, false);
 
   return {
     start,
