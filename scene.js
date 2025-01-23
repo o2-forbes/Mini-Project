@@ -28,6 +28,11 @@ export function createScene() {
 
   function stop() {
     renderer.setAnimationLoop(null);
+
+    // Clean up event listeners
+    document.removeEventListener("mousedown", onMouseDown, false);
+    document.removeEventListener("mouseup", onMouseUp, false);
+    document.removeEventListener("mousemove", onMouseMove, false);
   }
 
   // Pass the event correctly to camera methods
@@ -42,6 +47,14 @@ export function createScene() {
   function onMouseMove(event) {
     camera.onMouseMove(event);
   }
+
+  document.addEventListener(
+    "contextmenu",
+    (event) => {
+      event.preventDefault(); // This prevents the context menu from appearing
+    },
+    false
+  );
 
   // Add event listeners and pass the events to the camera functions
   document.addEventListener("mousedown", onMouseDown, false);

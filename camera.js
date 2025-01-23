@@ -9,6 +9,13 @@ export function createCamera(gameWindow) {
   const MIN_CAMERA_RADIUS = 2;
   const MAX_CAMERA_RADIUS = 10;
 
+  const MIN_CAMERA_ELEVATION = 30;
+  const MAX_CAMERA_ELEVATION = 90;
+
+  const ROTATION_SENSITIVITY = 0.05;
+  const ZOOM_SENSITIVITY = 0.02;
+  const PAN_SENSITIVITY = -0.01;
+
   const Y_AXIS = new THREE.Vector3(0, 1, 0);
 
   const camera = new THREE.PerspectiveCamera(
@@ -38,7 +45,8 @@ export function createCamera(gameWindow) {
       cameraRadius *
       Math.cos(cameraAzimuth * DEG2RAD) *
       Math.cos(cameraElevation * DEG2RAD);
-    camera.lookAt(0, 0, 0);
+    camera.position.add(cameraOrigin);
+    camera.lookAt(cameraOrigin);
   }
 
   // Initialize the camera's position
@@ -54,6 +62,7 @@ export function createCamera(gameWindow) {
     }
     if (event.button === RIGHT_MOUSE_BUTTON) {
       isRightMouseDown = true;
+      event.preventDefault(); // This will stop the browser's context menu from appearing
     }
   }
 
@@ -78,15 +87,18 @@ export function createCamera(gameWindow) {
 
     // Handle rotation of the camera
     if (isLeftMouseDown) {
-      cameraAzimuth += -(deltaX * 0.5);
-      cameraElevation += deltaY * 0.5;
-      cameraElevation = Math.min(90, Math.max(-90, cameraElevation)); // Allow negative elevation
+      cameraAzimuth += -(deltaX * ROTATION_SENSITIVITY);
+      cameraElevation += deltaY * ROTATION_SENSITIVITY;
+      cameraElevation = Math.min(
+        MAX_CAMERA_ELEVATION,
+        Math.max(MIN_CAMERA_ELEVATION, cameraElevation)
+      ); // Allow negative elevation
       updateCameraPosition();
     }
 
     // Handle zooming of the camera
     if (isRightMouseDown) {
-      cameraRadius += deltaY * 0.02;
+      cameraRadius += deltaY * ZOOM_SENSITIVITY;
       cameraRadius = Math.min(
         MAX_CAMERA_RADIUS,
         Math.max(MIN_CAMERA_RADIUS, cameraRadius)
@@ -96,6 +108,7 @@ export function createCamera(gameWindow) {
 
     // Handle panning of the camera (future implementation)
     if (isMiddleMouseDown) {
+      const panFactor = 0.005; // This factor controls the speed of panning
       const forward = new THREE.Vector3(0, 0, 1).applyAxisAngle(
         Y_AXIS,
         cameraAzimuth * DEG2RAD
@@ -104,8 +117,8 @@ export function createCamera(gameWindow) {
         Y_AXIS,
         cameraAzimuth * DEG2RAD
       );
-      cameraOrigin.add(forward.multiplyScalar(-0.01 * deltaY));
-      cameraOrigin.add(left.multiplyScalar(-0.01 * deltaX));
+      cameraOrigin.add(forward.multiplyScalar(PAN_SENSITIVITY * deltaY));
+      cameraOrigin.add(left.multiplyScalar(PAN_SENSITIVITY * deltaX));
       updateCameraPosition();
     }
 
