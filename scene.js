@@ -41,17 +41,31 @@ export function createScene() {
   function update(city) {
     for (let x = 0; x < city.size; x++) {
       for (let y = 0; y < city.size; y++) {
-        // Building geometry
-        const tile = city.data[x][y];
+        const currentBuildingId = buildings[x][y]
+          ? buildings[x][y].userData.id
+          : null;
+        const newBuildingId = city.data[x][y].buildingId;
 
-        if (tile.building && tile.building.startsWith("building")) {
-          const mesh = createAssetInstance(tile.building, x, y);
+        // Check for a valid buildingId
+        if (!newBuildingId || newBuildingId === "undefined") {
+          console.warn(`Invalid buildingId at (${x}, ${y})`);
+          continue; // Skip if the buildingId is invalid
+        }
 
-          if (buildings[x][y]) {
-            scene.remove(buildings[x][y]);
+        // If player removes building, remove from scene
+        if (!newBuildingId && currentBuildingId) {
+          scene.remove(buildings[x][y]);
+          buildings[x][y] = undefined;
+        }
+
+        // If data model changed, update mesh
+        if (newBuildingId !== currentBuildingId) {
+          scene.remove(buildings[x][y]);
+          const newBuildingMesh = createAssetInstance(newBuildingId, x, y);
+          if (newBuildingMesh) {
+            buildings[x][y] = newBuildingMesh;
+            scene.add(newBuildingMesh);
           }
-          scene.add(mesh); // Use 'mesh' here
-          buildings[x][y] = mesh; // Update the 'buildings' array
         }
       }
     }
