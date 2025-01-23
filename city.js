@@ -32,18 +32,6 @@ function createTile(x, y) {
     y,
     terrainId: "grass", // Default terrain
     buildingId: "grass", // Default building
-    update() {
-      const rand = Math.random();
-      if (rand < 0.01) {
-        // Chance to upgrade the building
-        if (this.buildingId === "grass") {
-          this.buildingId = "building-1";
-        } else if (this.buildingId === "building-1") {
-          this.buildingId = "building-2";
-        } else if (this.buildingId === "building-2") {
-          this.buildingId = "building-3";
-        }
-      }
-    },
+    update() {}
   };
 }

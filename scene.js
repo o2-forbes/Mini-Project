@@ -129,11 +129,11 @@ export function createScene() {
 
     if (intersections.length > 0) {
       if (selectedObject) selectedObject.material.emissive.setHex(0);
-
+    
       selectedObject = intersections[0].object;
       selectedObject.material.emissive.setHex(0x555555);
-      console.log(selectedObject.userData);
-
+      console.log(`Selected object: ${selectedObject.userData.id}`); // Debugging line
+    
       // Call the external callback if it's defined
       if (onObjectSelected) {
         onObjectSelected(selectedObject);
