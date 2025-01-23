@@ -15,7 +15,7 @@ export function createCity(size) {
   initialise(); // Ensure this is called to populate data
 
   function update() {
-    console.log(`Updating city`);
+    console.log("Updating city..."); // Fixed log syntax
     for (let x = 0; x < size; x++) {
       for (let y = 0; y < size; y++) {
         data[x][y].update(); // Update each tile

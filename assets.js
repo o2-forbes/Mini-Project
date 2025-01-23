@@ -6,18 +6,14 @@ const assets = {
   grass: (x, y) => {
     const material = new THREE.MeshLambertMaterial({ color: 0x00aa00 });
     const mesh = new THREE.Mesh(geometry, material);
-
-    mesh.userData = { id: "grass" };
-
+    mesh.userData = { id: "grass", x, y };
     mesh.position.set(x, -0.5, y);
     return mesh;
   },
   "building-1": (x, y) => {
     const material = new THREE.MeshLambertMaterial({ color: 0x777777 });
     const mesh = new THREE.Mesh(geometry, material);
-
-    mesh.userData = { id: "building-1" };
-
+    mesh.userData = { id: "building-1", x, y };
     mesh.position.set(x, 0.5, y);
     return mesh;
   },
@@ -25,9 +21,7 @@ const assets = {
     const material = new THREE.MeshLambertMaterial({ color: 0x777777 });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(1, 2, 1);
-
-    mesh.userData = { id: "building-2" };
-
+    mesh.userData = { id: "building-2", x, y };
     mesh.position.set(x, 1, y);
     return mesh;
   },
@@ -35,9 +29,7 @@ const assets = {
     const material = new THREE.MeshLambertMaterial({ color: 0x777777 });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(1, 3, 1);
-
-    mesh.userData = { id: "building-3" };
-
+    mesh.userData = { id: "building-3", x, y };
     mesh.position.set(x, 1.5, y);
     return mesh;
   },
@@ -45,7 +37,7 @@ const assets = {
 
 export function createAssetInstance(assetId, x, y) {
   if (!(assetId in assets)) {
-    console.warn(`Asset Id ${assetId} is not found.`); // Log warning for invalid asset ID
+    console.warn(`Asset Id ${assetId} is not found.`); // Corrected string interpolation
     return null; // Return null if the asset ID is invalid
   }
 

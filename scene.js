@@ -21,6 +21,14 @@ export function createScene() {
   let terrain = [];
   let buildings = [];
 
+  // Store the callback function
+  let onObjectSelected = undefined;
+
+  // Setter to set the callback
+  function setOnObjectSelected(callback) {
+    onObjectSelected = callback;
+  }
+
   function initialise(city) {
     scene.clear();
     terrain = [];
@@ -53,7 +61,7 @@ export function createScene() {
 
         // Check for a valid buildingId
         if (!newBuildingId || newBuildingId === "undefined") {
-          console.warn(`Invalid buildingId at (${x}, ${y})`);
+          console.warn(`Invalid buildingId at (${x}, ${y})`); // Fix log syntax
           continue; // Skip if the buildingId is invalid
         }
 
@@ -108,7 +116,7 @@ export function createScene() {
     document.removeEventListener("mousemove", onMouseMove, false);
   }
 
-  // Pass the event correctly to camera methods
+  // Mouse event handling
   function onMouseDown(event) {
     camera.onMouseDown(event);
 
@@ -120,7 +128,16 @@ export function createScene() {
     let intersections = raycaster.intersectObjects(scene.children, false);
 
     if (intersections.length > 0) {
-      console.log(intersections[0]);
+      if (selectedObject) selectedObject.material.emissive.setHex(0);
+
+      selectedObject = intersections[0].object;
+      selectedObject.material.emissive.setHex(0x555555);
+      console.log(selectedObject.userData);
+
+      // Call the external callback if it's defined
+      if (onObjectSelected) {
+        onObjectSelected(selectedObject);
+      }
     }
   }
 
@@ -135,17 +152,17 @@ export function createScene() {
   document.addEventListener(
     "contextmenu",
     (event) => {
-      event.preventDefault(); // This prevents the context menu from appearing
+      event.preventDefault(); // Prevent context menu from appearing
     },
     false
   );
 
-  // Add event listeners and pass the events to the camera functions
+  // Add event listeners and pass the events to camera methods
   document.addEventListener("mousedown", onMouseDown, false);
   document.addEventListener("mouseup", onMouseUp, false);
   document.addEventListener("mousemove", onMouseMove, false);
 
-  // Handle resizing of the window
+  // Handle window resizing
   window.addEventListener("resize", () => {
     const width = gameWindow.offsetWidth;
     const height = gameWindow.offsetHeight;
@@ -154,7 +171,9 @@ export function createScene() {
     renderer.setSize(width, height);
   });
 
+  // Return the API, including the setter for `onObjectSelected`
   return {
+    setOnObjectSelected, // Allow external code to set the callback
     initialise,
     update,
     start,

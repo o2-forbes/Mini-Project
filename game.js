@@ -7,10 +7,18 @@ export function createGame() {
   city.initialise(); // Make sure to call this to populate the city data
   scene.initialise(city);
 
+  scene.onObjectSelected = (selectedObject) => {
+    console.log(selectedObject);
+
+    let { x, y } = selectedObject.userData;
+    const tile = city.data[x][y];
+    console.log(tile);
+  };
+
   // Move the event listeners and start call inside the createGame function
-  document.addEventListener("mousedown", scene.onMouseDown, false);
-  document.addEventListener("mouseup", scene.onMouseUp, false);
-  document.addEventListener("mousemove", scene.onMouseMove, false);
+  document.addEventListener("mousedown", scene.onMouseDown.bind(scene), false);
+  document.addEventListener("mouseup", scene.onMouseUp.bind(scene), false);
+  document.addEventListener("mousemove", scene.onMouseMove.bind(scene), false);
   document.addEventListener(
     "contextmenu",
     (event) => event.preventDefault(),
