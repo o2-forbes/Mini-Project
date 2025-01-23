@@ -42,7 +42,7 @@ export function createScene() {
             buildingGeometry,
             buildingMaterial
           );
-          mesh.position.set(x, 0.5, y);
+          buildingMesh.position.set(x, 0.5, y);
           scene.add(buildingMesh);
           column.push(buildingMesh);
         }

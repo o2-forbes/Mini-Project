@@ -15,9 +15,8 @@ export function createCity(size) {
       data.push(column);
     }
   }
-  return {
-    size,
-    data,
-    initialise,
-  };
+
+  initialise(); // Ensure this is called to populate data
+
+  return { size, data, initialise };
 }

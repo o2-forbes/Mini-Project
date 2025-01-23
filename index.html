@@ -20,15 +20,9 @@
     </div>
 
     <script type="module">
-      import { createScene } from "./scene.js";
-      import { createCity } from "./city.js";
+      import { createGame } from "./game.js";
 
-      window.onload = () => {
-        const scene = createScene(); // Create the scene
-        const city = createCity(8); // Create the city
-        scene.initialise(city); // Initialise the scene with the city
-        scene.start(); // Start rendering the scene
-      };
+      window.onload = () => createGame();
     </script>
   </body>
 </html>

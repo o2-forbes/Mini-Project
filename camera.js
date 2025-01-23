@@ -34,7 +34,7 @@ export function createCamera(gameWindow) {
   let prevMouseX = 0;
   let prevMouseY = 0;
 
-  // Moved `updateCameraPosition` to the top level
+  // Moved updateCameraPosition to the top level
   function updateCameraPosition() {
     camera.position.x =
       cameraRadius *
