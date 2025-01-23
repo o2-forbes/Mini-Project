@@ -25,9 +25,6 @@ export function createCity(size) {
           },
         };
 
-        if (Math.random() > 0.7) {
-          tile.building = "building";
-        }
         column.push(tile);
       }
       data.push(column);

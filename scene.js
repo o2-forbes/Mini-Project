@@ -33,8 +33,9 @@ export function createScene() {
         //Building geometry
         const tile = city.data[x][y];
 
-        if (tile.building === "building") {
-          const buildingGeometry = new THREE.BoxGeometry(1, 1, 1);
+        if (tile.building && tile.building.startsWith("building")) {
+          const height = Number(tile.building.slice(-1));
+          const buildingGeometry = new THREE.BoxGeometry(1, height, 1);
           const buildingMaterial = new THREE.MeshLambertMaterial({
             color: 0x777777,
           });
@@ -42,7 +43,7 @@ export function createScene() {
             buildingGeometry,
             buildingMaterial
           );
-          buildingMesh.position.set(x, 0.5, y);
+          buildingMesh.position.set(x, height / 2, y);
           scene.add(buildingMesh);
           column.push(buildingMesh);
         }
@@ -51,6 +52,29 @@ export function createScene() {
     }
 
     setupLights();
+  }
+
+  function update(city) {
+    for (let x = 0; x < city.size; x++) {
+      for (let y = 0; y < city.size; y++) {
+        //Building geometry
+        const tile = city.data[x][y];
+
+        if (tile.building && tile.building.startsWith("building")) {
+          const height = Number(tile.building.slice(-1));
+          const buildingGeometry = new THREE.BoxGeometry(1, height, 1);
+          const buildingMaterial = new THREE.MeshLambertMaterial({
+            color: 0x777777,
+          });
+          const buildingMesh = new THREE.Mesh(
+            buildingGeometry,
+            buildingMaterial
+          );
+          buildingMesh.position.set(x, height / 2, y);
+          scene.add(buildingMesh);
+        }
+      }
+    }
   }
 
   function setupLights() {
