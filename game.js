@@ -3,7 +3,7 @@ import { createCity } from "./city.js"; // Ensure .js extension is included
 
 export function createGame() {
   const scene = createScene();
-  const city = createCity(8);
+  const city = createCity(16);
   city.initialise(); // Make sure to call this to populate the city data
   scene.initialise(city);
 
@@ -20,7 +20,7 @@ export function createGame() {
   const game = {
     update() {
       city.update();
-      //scene.update(city);
+      scene.update(city);
     },
   };
 

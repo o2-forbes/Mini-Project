@@ -13,13 +13,11 @@ export function createCity(size) {
             const x = Math.random();
             if (x < 0.01) {
               if (this.building === undefined) {
-                this.building = "buidling-1";
-              }
-              if (this.building === "buidling-1") {
-                this.building = "buidling-2";
-              }
-              if (this.building === "buidling-2") {
-                this.building = "buidling-3";
+                this.building = "building-1";
+              } else if (this.building === "building-1") {
+                this.building = "building-2";
+              } else if (this.building === "building-2") {
+                this.building = "building-3";
               }
             }
           },

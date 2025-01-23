@@ -13,42 +13,28 @@ export function createScene() {
   renderer.setSize(gameWindow.offsetWidth, gameWindow.offsetHeight);
   gameWindow.appendChild(renderer.domElement);
 
-  let meshes = [];
+  let terrain = [];
+  let buildings = [];
 
   function initialise(city) {
     scene.clear();
-    meshes = [];
+    terrain = [];
+    buildings = Array.from({ length: city.size }, () =>
+      Array(city.size).fill(null)
+    ); // Fix here
 
     for (let x = 0; x < city.size; x++) {
       const column = [];
       for (let y = 0; y < city.size; y++) {
-        //Grass geometry
+        // Grass geometry
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshLambertMaterial({ color: 0x00aa00 });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(x, -0.5, y);
         scene.add(mesh);
         column.push(mesh);
-
-        //Building geometry
-        const tile = city.data[x][y];
-
-        if (tile.building && tile.building.startsWith("building")) {
-          const height = Number(tile.building.slice(-1));
-          const buildingGeometry = new THREE.BoxGeometry(1, height, 1);
-          const buildingMaterial = new THREE.MeshLambertMaterial({
-            color: 0x777777,
-          });
-          const buildingMesh = new THREE.Mesh(
-            buildingGeometry,
-            buildingMaterial
-          );
-          buildingMesh.position.set(x, height / 2, y);
-          scene.add(buildingMesh);
-          column.push(buildingMesh);
-        }
       }
-      meshes.push(column);
+      terrain.push(column);
     }
 
     setupLights();
@@ -71,7 +57,12 @@ export function createScene() {
             buildingMaterial
           );
           buildingMesh.position.set(x, height / 2, y);
+
+          if (buildings[x][y]) {
+            scene.remove(buildings[x][y]);
+          }
           scene.add(buildingMesh);
+          buildings[x][y] = buildingMesh;
         }
       }
     }
@@ -146,6 +137,7 @@ export function createScene() {
 
   return {
     initialise,
+    update,
     start,
     stop,
     onMouseDown,
