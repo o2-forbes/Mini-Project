@@ -17,6 +17,19 @@ export function createGame() {
     false
   );
 
+  const game = {
+    update() {
+      city.update();
+      //scene.update(city);
+    },
+  };
+
+  setInterval(() => {
+    game.update();
+  }, 1000);
+
   // Start rendering the scene
   scene.start();
+
+  return game;
 }
